@@ -1,0 +1,248 @@
+{
+  "name": "Gmail to Google Sheets Logger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3880e1ab-003d-44e1-8cae-08a2cd837d60",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "harshil3046@gmail.com,hs2117563@gmail.com",
+        "subject": "MY first N8N Automation",
+        "message": "Hi I hope ur all well",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ff542b90-7b0b-43e5-a325-4d86569c7c24",
+      "name": "Send Test Email",
+      "webhookId": "770ee114-74db-4002-92d6-8ef8346a773c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "77KJjX3ktVW9hCuF",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7e5be96e-35c0-403c-b5af-38ff8a9ae902",
+      "name": "Retrieve Gmail Email",
+      "webhookId": "40316b71-77c0-4566-b7e6-be75b832459b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "77KJjX3ktVW9hCuF",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2f19cb3-d6cb-4881-b23c-1540a64f1b2c",
+              "name": "labels[0].id",
+              "value": "={{ $json.labels[0].id }}",
+              "type": "string"
+            },
+            {
+              "id": "8a944427-8874-466b-b803-9e680a464eca",
+              "name": "To",
+              "value": "={{ $json.To }}",
+              "type": "string"
+            },
+            {
+              "id": "24413c78-530a-4341-acdc-dcbccffe2ff5",
+              "name": "Subject",
+              "value": "={{ $json.Subject }}",
+              "type": "string"
+            },
+            {
+              "id": "b39596c1-f00b-48b8-a428-4d4bca5db57d",
+              "name": "From",
+              "value": "={{ $json.From }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "91ae56e8-3b2e-4648-9561-1c273059b40f",
+      "name": "Extract Email Details"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1sRLlXohpG3BHnCPV6Rhz_h9mNNb72EH_MSscFU9fGwg",
+          "mode": "list",
+          "cachedResultName": "first sheet n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sRLlXohpG3BHnCPV6Rhz_h9mNNb72EH_MSscFU9fGwg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sRLlXohpG3BHnCPV6Rhz_h9mNNb72EH_MSscFU9fGwg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.labels[0].id }}",
+            "to": "={{ $json.To }}",
+            "from": "={{ $json.From }}",
+            "subject": "={{ $json.Subject }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "to",
+              "displayName": "to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "from",
+              "displayName": "from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subject",
+              "displayName": "subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "96452e34-aad6-4f84-808c-028c8026968b",
+      "name": "Store Email in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "nyvTwNrm9TPLVVqa",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Send Test Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Test Email": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Gmail Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Gmail Email": {
+      "main": [
+        [
+          {
+            "node": "Extract Email Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email Details": {
+      "main": [
+        [
+          {
+            "node": "Store Email in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "23177773-d61b-43b4-8d31-4a3a467e3f29",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3da4aa938db170e6ba7a028570d9c9069fa7f43bc53480b507bc25ca4b3372c5"
+  },
+  "id": "acbLdZ2B1WB0bQCM",
+  "tags": []
+}
